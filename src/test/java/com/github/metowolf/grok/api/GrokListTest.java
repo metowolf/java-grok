@@ -1,4 +1,4 @@
-package io.krakens.grok.api;
+package com.github.metowolf.grok.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import io.krakens.grok.api.exception.GrokException;
+import com.github.metowolf.grok.api.exception.GrokException;
 
 import com.google.common.io.Resources;
 import org.junit.Before;

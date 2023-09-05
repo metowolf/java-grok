@@ -17,7 +17,7 @@ repositories {
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
-group = "io.krakens"
+group = "com.github.metowolf"
 archivesBaseName = "java-grok"
 
 ext {
@@ -25,6 +25,7 @@ ext {
     jacocoToolVersion = "0.7.9"
 
     commonsLang3Version = "3.7"
+    re2jVersion = "1.7"
 
     junitVersion = "4.12"
     assertjVersion = "3.9.1"
@@ -33,10 +34,13 @@ ext {
 
 dependencies {
     compile "org.apache.commons:commons-lang3:$commonsLang3Version"
+    compile "com.google.re2j:re2j:$re2jVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "com.google.guava:guava:$guavaVersion"
+    testImplementation "org.hamcrest:hamcrest-core:2.2"
+    testImplementation "org.hamcrest:hamcrest-library:2.2"
 }
 
 task javadocJar(type: Jar) {

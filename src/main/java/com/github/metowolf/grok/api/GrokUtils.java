@@ -1,11 +1,11 @@
-package io.krakens.grok.api;
+package com.github.metowolf.grok.api;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.google.re2j.Matcher;
+import com.google.re2j.Pattern;
 
 
 /**
@@ -18,7 +18,7 @@ public class GrokUtils {
   /**
    * Extract Grok patter like %{FOO} to FOO, Also Grok pattern with semantic.
    */
-  public static final Pattern GROK_PATTERN = Pattern.compile(
+  public static final PatternWrapper GROK_PATTERN = PatternWrapper.compile(
       "%\\{"
           + "(?<name>"
           + "(?<pattern>[A-z0-9]+)"
@@ -33,7 +33,7 @@ public class GrokUtils {
           + "\\}");
 
   public static final Pattern NAMED_REGEX = Pattern
-      .compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>");
+      .compile("\\(\\?P?<([a-zA-Z][a-zA-Z0-9]*)>");
 
   public static Set<String> getNameGroups(String regex) {
     Set<String> namedGroups = new LinkedHashSet<>();
@@ -44,7 +44,7 @@ public class GrokUtils {
     return namedGroups;
   }
 
-  public static Map<String, String> namedGroups(Matcher matcher, Set<String> groupNames) {
+  public static Map<String, String> namedGroups(MatcherWrapper matcher, Set<String> groupNames) {
     Map<String, String> namedGroups = new LinkedHashMap<>();
     for (String groupName : groupNames) {
       String groupValue = matcher.group(groupName);

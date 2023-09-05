@@ -1,4 +1,4 @@
-package io.krakens.grok.api;
+package com.github.metowolf.grok.api;
 
 import java.util.ArrayList;
 import java.util.Collections;

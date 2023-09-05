@@ -1,4 +1,4 @@
-package io.krakens.grok.api;
+package com.github.metowolf.grok.api;
 
 import static java.lang.String.format;
 
@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import io.krakens.grok.api.exception.GrokException;
+import com.github.metowolf.grok.api.exception.GrokException;
+import com.google.re2j.Matcher;
+import com.google.re2j.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -160,7 +160,7 @@ public class GrokCompiler implements Serializable {
       iterationLeft--;
 
       Set<String> namedGroups = GrokUtils.getNameGroups(GrokUtils.GROK_PATTERN.pattern());
-      Matcher matcher = GrokUtils.GROK_PATTERN.matcher(namedRegex);
+      MatcherWrapper matcher = GrokUtils.GROK_PATTERN.matcher(namedRegex);
       // Match %{Foo:bar} -> pattern name and subname
       // Match %{Foo=regex} -> add new regex definition
       if (matcher.find()) {

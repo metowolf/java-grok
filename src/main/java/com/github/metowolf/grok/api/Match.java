@@ -1,4 +1,4 @@
-package io.krakens.grok.api;
+package com.github.metowolf.grok.api;
 
 
 import static java.lang.String.format;
@@ -8,10 +8,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 
-import io.krakens.grok.api.Converter.IConverter;
-import io.krakens.grok.api.exception.GrokException;
+import com.github.metowolf.grok.api.exception.GrokException;
 
 /**
  * {@code Match} is a representation in {@code Grok} world of your log.
@@ -21,7 +19,7 @@ import io.krakens.grok.api.exception.GrokException;
 public class Match {
   private final CharSequence subject;
   private final Grok grok;
-  private final Matcher match;
+  private final MatcherWrapper match;
   private final int start;
   private final int end;
   private boolean keepEmptyCaptures = true;
@@ -30,7 +28,7 @@ public class Match {
   /**
    * Create a new {@code Match} object.
    */
-  public Match(CharSequence subject, Grok grok, Matcher match, int start, int end) {
+  public Match(CharSequence subject, Grok grok, MatcherWrapper match, int start, int end) {
     this.subject = subject;
     this.grok = grok;
     this.match = match;
@@ -43,7 +41,7 @@ public class Match {
    */
   public static final Match EMPTY = new Match("", null, null, 0, 0);
 
-  public Matcher getMatch() {
+  public MatcherWrapper getMatch() {
     return match;
   }
 
@@ -141,7 +139,7 @@ public class Match {
 
       Object value = valueString;
       if (valueString != null) {
-        IConverter<?> converter = grok.converters.get(key);
+        Converter.IConverter<?> converter = grok.converters.get(key);
 
         if (converter != null) {
           key = Converter.extractKey(key);

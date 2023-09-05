@@ -1,4 +1,4 @@
-package io.krakens.grok.api;
+package com.github.metowolf.grok.api;
 
 import java.io.Serializable;
 import java.time.ZoneId;
@@ -6,12 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import io.krakens.grok.api.Converter.IConverter;
-
-import org.apache.commons.lang3.StringUtils;
+import com.github.metowolf.grok.api.Converter.IConverter;
 
 /**
  * {@code Grok} parse arbitrary text and structure it.
@@ -39,7 +34,7 @@ public class Grok implements Serializable {
   /**
    * Pattern of the namedRegex.
    */
-  private final Pattern compiledNamedRegex;
+  private final PatternWrapper compiledNamedRegex;
 
   /**
    * {@code Grok} patterns definition.
@@ -67,7 +62,7 @@ public class Grok implements Serializable {
       ZoneId defaultTimeZone) {
     this.originalGrokPattern = pattern;
     this.namedRegex = namedRegex;
-    this.compiledNamedRegex = Pattern.compile(namedRegex);
+    this.compiledNamedRegex = PatternWrapper.compile(namedRegex);
     this.namedRegexCollection = namedRegexCollection;
     this.namedGroups = GrokUtils.getNameGroups(namedRegex);
     this.groupTypes = Converter.getGroupTypes(namedRegexCollection.values());
@@ -167,7 +162,7 @@ public class Grok implements Serializable {
       return Match.EMPTY;
     }
 
-    Matcher matcher = compiledNamedRegex.matcher(text);
+    MatcherWrapper matcher = compiledNamedRegex.matcher(text);
     if (matcher.find()) {
       return new Match(
           text, this, matcher, matcher.start(0), matcher.end(0)
