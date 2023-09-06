@@ -12,11 +12,9 @@ public class PatternWrapper {
     public PatternWrapper(String regex) {
         try {
             this.pattern = Pattern.compile(rewritePattern(regex));
-            System.out.println("Using RE2J");
         } catch (Exception e) {
             this.javaPattern = java.util.regex.Pattern.compile(regex);
             this.isJavaPattern = true;
-            System.out.println("Using Java");
         }
     }
 
