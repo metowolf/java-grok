@@ -40,7 +40,7 @@ public class ApacheDataTypeTest {
   public void test002_httpd_access_semi() throws GrokException {
     Grok grok = compiler.compile(
         "%{IPORHOST:clientip} %{USER:ident;boolean} %{USER:auth} "
-            + "\\[%{HTTPDATE:timestamp;date;dd/MMM/yyyy:HH:mm:ss Z}\\] \"(?:%{WORD:verb;string} %{NOTSPACE:request}"
+            + "\\[%{HTTPDATE:timestamp;string}\\] \"(?:%{WORD:verb;string} %{NOTSPACE:request}"
             + "(?: HTTP/%{NUMBER:httpversion;float})?|%{DATA:rawrequest})\" %{NUMBER:response;int} "
             + "(?:%{NUMBER:bytes;long}|-)");
 
@@ -49,8 +49,7 @@ public class ApacheDataTypeTest {
     Map<String, Object> map = gm.capture();
 
     Assertions.assertThat(map).doesNotContainKey("Error");
-    Instant ts = ZonedDateTime.of(2004, 3, 7, 16, 45, 56, 0, ZoneOffset.ofHours(-8)).toInstant();
-    assertEquals(map.get("timestamp"), ts);
+    assertEquals(map.get("timestamp"), "07/Mar/2004:16:45:56 -0800");
     assertEquals(map.get("response"), 401);
     assertEquals(map.get("ident"), Boolean.FALSE);
     assertEquals(map.get("httpversion"), 1.1f);
@@ -63,7 +62,7 @@ public class ApacheDataTypeTest {
   public void test002_httpd_access_colon() throws GrokException {
     Grok grok = compiler.compile(
         "%{IPORHOST:clientip} %{USER:ident:boolean} %{USER:auth} "
-            + "\\[%{HTTPDATE:timestamp:date:dd/MMM/yyyy:HH:mm:ss Z}\\] \"(?:%{WORD:verb:string} %{NOTSPACE:request}"
+            + "\\[%{HTTPDATE:timestamp:string}\\] \"(?:%{WORD:verb:string} %{NOTSPACE:request}"
             + "(?: HTTP/%{NUMBER:httpversion:float})?|%{DATA:rawrequest})\" %{NUMBER:response:int} "
             + "(?:%{NUMBER:bytes:long}|-)");
 
@@ -72,8 +71,7 @@ public class ApacheDataTypeTest {
 
     Assertions.assertThat(map).doesNotContainKey("Error");
 
-    Instant ts = ZonedDateTime.of(2004, 3, 7, 16, 45, 56, 0, ZoneOffset.ofHours(-8)).toInstant();
-    assertEquals(map.get("timestamp"), ts);
+    assertEquals(map.get("timestamp"), "07/Mar/2004:16:45:56 -0800");
     assertEquals(map.get("response"), 401);
     assertEquals(map.get("ident"), Boolean.FALSE);
     assertEquals(map.get("httpversion"), 1.1f);

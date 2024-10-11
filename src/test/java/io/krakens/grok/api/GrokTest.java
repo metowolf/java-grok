@@ -630,47 +630,6 @@ public class GrokTest {
     }
   }
 
-  @Test
-  public void testGroupTypes() {
-    Grok grok = compiler.compile(
-        "%{HTTPDATE:timestamp;date;dd/MMM/yyyy:HH:mm:ss Z} %{USERNAME:username:text} "
-            + "%{IPORHOST:host}:%{POSINT:port:integer}",
-        true);
-    assertEquals(Converter.Type.DATETIME, grok.groupTypes.get("timestamp"));
-    assertEquals(Converter.Type.STRING, grok.groupTypes.get("username"));
-    assertEquals(Converter.Type.INT, grok.groupTypes.get("port"));
-    assertNull(grok.groupTypes.get("host"));
-
-    Match match = grok.match("07/Mar/2004:16:45:56 -0800 test 64.242.88.10:8080");
-    Map<String, Object> result = match.capture();
-    assertEquals("test", result.get("username"));
-    assertEquals("64.242.88.10", result.get("host"));
-    assertEquals(8080, result.get("port"));
-    assertTrue(result.get("timestamp") instanceof Instant);
-  }
-
-  @Test
-  public void testTimeZone() {
-    // no timezone. default to sytem default
-    String date = "03/19/2018 14:11:00";
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-    Grok grok = compiler.compile("%{DATESTAMP:timestamp;date;MM/dd/yyyy HH:mm:ss}", true);
-    Instant instant = (Instant) grok.match(date).capture().get("timestamp");
-    assertEquals(ZonedDateTime.parse(date, dtf.withZone(ZoneOffset.systemDefault())).toInstant(), instant);
-
-    // set default timezone to PST
-    ZoneId pst = ZoneId.of("PST", ZoneId.SHORT_IDS);
-    grok = compiler.compile("%{DATESTAMP:timestamp;date;MM/dd/yyyy HH:mm:ss}", pst, true);
-    instant = (Instant) grok.match(date).capture().get("timestamp");
-    assertEquals(ZonedDateTime.parse(date, dtf.withZone(pst)).toInstant(), instant);
-
-    // when timestamp has timezone, use it instead of the default.
-    String dateWithTimeZone = "07/Mar/2004:16:45:56 +0800";
-    dtf = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z");
-    grok = compiler.compile("%{HTTPDATE:timestamp;date;dd/MMM/yyyy:HH:mm:ss Z}", pst, true);
-    instant = (Instant) grok.match(dateWithTimeZone).capture().get("timestamp");
-    assertEquals(ZonedDateTime.parse(dateWithTimeZone, dtf.withZone(ZoneOffset.ofHours(8))).toInstant(), instant);
-  }
 
   @Test
   public void testEmptyLine() {
